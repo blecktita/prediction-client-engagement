@@ -71,7 +71,6 @@ Steps:
    ```
 
 ---
-
 ## Infrastructure Design
 ### Model Serving Layer
 - Model preparation involves converting trained Keras models into TensorFlow's SavedModel standard
@@ -95,25 +94,11 @@ Steps:
 --
 
 ## How to Run the Project
-
-### Prerequisites
-
-Ensure you have the following installed:
-
-- Python 3.10+
-- Kaggle account and local authorization setup
-- AWS account and local authorization & CLI setup
-- TensorFlow/Keras
-- Docker
-- Kubernetes
-- kubectl
-- kind
-
 ### Steps
 
 1. Clone this repository
    ```
-   git clone https://github.com/ketut-garjita/E-Commerce-Engagement-ML.git
+   git clone https://github.com/blecktita/prediction-client-engagement.git
    ```
    
 2. Model Training and Saving
@@ -121,7 +106,7 @@ Ensure you have the following installed:
    Run the model training script and save the model in TensorFlow SavedModel format:
 
    ```
-   cd E-Commerce-Engagement-ML
+   cd prediction-client-engagement
    python src/train_model.py
    ```
 
@@ -141,19 +126,19 @@ Ensure you have the following installed:
 5. Build Docker Images with TensorFlow Serving   
 
    ```
-   docker build -t e-commerce-engagement-model .
+   docker build -t prediction-client-engagement .
    ```
 
 6. Create and Run Container
    ```
-   docker run -p 8501:8501 --name tensorflow-serving e-commerce-engagement-model
+   docker run -p 8501:8501 --name tensorflow-serving prediction-client-engagement
    ```
 
 7. Deploy TensorFlow Serving on Kubernetes
 
    - Register docker image with kind
      ```
-     kind load docker-image e-commerce-engagement-model:latest
+     kind load docker-image prediction-client-engagement:latest
      ```
      
    - Apply deployment and service
@@ -178,22 +163,22 @@ Ensure you have the following installed:
 9. Deploy TensorFlow Serving on AWS EKS
    - Authenticate Docker to AWS ECR, use the AWS CLI to authenticate Docker client
        ```
-       aws ecr get-login-password --region ap-southeast-3 | docker login --username AWS --password-stdin 734800375959.dkr.ecr.ap-southeast-3.amazonaws.com
+       aws ecr get-login-password --region eu-south-2 | docker login --username AWS --password-stdin 847392156084.bt.ecr.eu-south-2.amazonaws.com
        ```
        
    - Create repository
        ```
-       aws ecr create-repository --repository-name e-commerce-engagement-model
+       aws ecr create-repository --repository-name prediction-client-engagement
        ```
        
    - Tag image to AWS
       ```
-      docker tag e-commerce-engagement-model 734800375959.dkr.ecr.ap-southeast-3.amazonaws.com/e-commerce-engagement-model:latest
+      docker tag prediction-client-engagement 847392156084.bt.ecr.eu-south-2.amazonaws.com/prediction-client-engagement:latest
       ```
       
    - Push image
       ```
-      docker push 734800375959.dkr.ecr.ap-southeast-3.amazonaws.com/e-commerce-engagement-model:latest
+      docker push 847392156084.bt.ecr.eu-south-2.amazonaws.com/prediction-client-engagement:latest
       ```
       
    - Configure AWS CLI and EKS
@@ -205,7 +190,7 @@ Ensure you have the following installed:
       ```
       eksctl create cluster \
         --name tf-serving-cluster \
-        --region ap-southeast-3 \
+        --region eu-south-2 \
         --nodegroup-name tf-serving-nodes \
         --nodes 2 \
         --node-type t3.medium \
@@ -245,7 +230,7 @@ Ensure you have the following installed:
 
   ```
   {
-  "text": "Diskon besar Ramadhan di Tokopedia!"
+  "text": "Black Friday Doorbusters: 70% off Electronics!"
   }
   ```
 
@@ -255,7 +240,7 @@ Ensure you have the following installed:
 
   ```
   {
-  "prediction": [[256.78619384765625]]
+  "prediction": [[312.45983123779297]]
   }
   ```
 
@@ -266,26 +251,11 @@ Ensure you have the following installed:
 
 The model successfully predicts the engagement score for a tweet. For example:
 
-Input: "Diskon besar Ramadan di Tokopedia!"
-Output: 256.78
+Input: "Huge Prime Day Deals at Amazon!"
+Output: 367.41
 
 This score can be interpreted as the expected combination of likes, replies, and retweets.
 
 ---
 
-## Future Improvements
 
-1. Incorporate additional features such as posting time and user follower count.
-2. Use Transformers for improved text understanding.
-3. Integrate real-time tweet analysis pipelines with Kafka and Spark Streaming.
-4. Optimize the EKS deployment for autoscaling and cost efficiency.
-
----
-
-## Acknowledgments
-
-Tools: HDFS, Pyspark, Numpy, TensorFlow Serving, Flask, Docker, Kubernetes, AWS EKS.
-
-Data: [Indonesia's Top E-Commerce Tweets](https://www.kaggle.com/datasets/robertvici/indonesia-top-ecommerce-unicorn-tweets)
-
----
