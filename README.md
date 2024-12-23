@@ -1,158 +1,34 @@
-**Machine Learning - Zoomcamp**
-# E-Commerce Engagement Prediction Model
+# Client Engagement Prediction Model
 
 ---
 
 ## Project Overview
 
-This project aims to predict the engagement of tweets related to several e-commerce companies. Engagement is defined as a combination of likes, replies, and retweets. The model processes input text (preprocessed tweets) and hashtag information to output an engagement score that reflects the potential audience interaction.
-
-The project implements TensorFlow Serving, Kubernetes, Docker, and AWS Kubernetes (EKS) for efficient model deployment ⁷and scalability.
-
+I basically created a predictive system that analyzes the social media engagement for most clients. I deployed the model using TensorFlow Serving for real-time predictions, packaged it in Docker containers, and orchestrated it with Kubernetes on AWS EKS
 ---
 
-## Table of Contents
+## Project Goals
 
-- Project Overview
+My initiative focuses on several key objectives:
+- Developing a predictive algorithm to evaluate tweet engagement potential by analyzing content and hashtag patterns
+- Implementing TensorFlow Serving to enable instant prediction capabilities
+- Creating a containerized solution with Docker infrastructure
+- Leveraging Kubernetes on AWS EKS to establish a robust, scalable production environment
 
-- Features and Target
+## Technical Stack
+### Storage & Processing
+- HDFS ecosystem for data persistence
+- Pyspark framework for efficient data manipulation
 
-- Objective
+### Model Development & Serving
+- TensorFlow as the core deep learning framework
+- Flask for RESTful API implementation
+- TensorFlow Serving to optimize model performance in production
 
-- Technologies Used
-
-- Dataset
-
-- Tasks Flow
-
-- Model
-  
-- Repositiry Structures
-
-- Deployment Architecture
-
-- How to Run the Project
-
-- API Usage
-
-- Results
-
-- Future Improvements
-
-- Acknowledgments
-
----
-
-## Features and Target
-
-### Features
-1. clean_tweet: Preprocessed version of the tweet text (lowercased, tokenized, and cleaned).
-2. hashtags: Count or presence of hashtags in the tweet
-
-### Target
-engagement: A continuous value representing the combination of likes, replies, and retweets.
-
-
-## Objective
-
-The primary goals of this project are to:
-
-Predict the engagement score for a given tweet based on its content and hashtags.
-
-Deploy the model using TensorFlow Serving for real-time predictions.
-
-Containerize the application using Docker.
-
-Orchestrate the deployment using Kubernetes and scale it on AWS EKS for production-level deployment.
-
----
-
-## Technologies Used
-
-The project integrates the following technologies:
-
-1. HDFS: Saving data
-2. Pyspark: Data processing
-3. TensorFlow: For building and saving the deep learning model.
-4. Flask: To create an API for serving predictions.
-5. Docker: Containerizes the Flask API and TensorFlow model.
-6. TensorFlow Serving: Optimized model serving for real-time predictions.
-7. Kubernetes: Orchestrates containers for scaling and deployment.
-8. AWS EKS: Managed Kubernetes service for deployment in the cloud.
-
---- 
-## Dataset
-
-Dataset header: **Indonesia's Top E-Commerce Tweets**
-
-Dataset link: [https://www.kaggle.com/datasets/robertvici/indonesia-top-ecommerce-unicorn-tweets](https://www.kaggle.com/datasets/robertvici/indonesia-top-ecommerce-unicorn-tweets)
-
-Dataset content: 
-
-![image](https://github.com/user-attachments/assets/2c78b971-45d7-4932-889c-b3df9b48b856)
-
-**About Dataset**
-
-This dataset contains the tweets from the first tweet until April 2020 of top e-commerce unicorn in Indonesia namely Shopee, Tokopedia, Bukalapak, Lazada and Blibli.
-
-The dataset consists of tweets about an associated engagement metrics. Each data point includes:
-- Tweet text
-- Number of hashtags
-- Engagement value (target)
-
-Preprocessing includes:
-- Text cleaning: Removing punctuation, special characters, and links.
-- Tokenization: Splitting text into tokens.
-
----
-
-## Tasks Flow
-
-Model deployment of TensorFlow Serving on Kubernetes and AWS EKS.
-
-```mermaid
-graph TD
-    A((python
-train_model.py)) --> | saved_model | B((docker
-build))
-    B --> | docker images | C((docker
-run))
-    C --> D1[TensorFlow Serving 
-on Kubernetes]
-    C --> D2[TensorFlow Serving 
-on AWS EKS]
-    
-    D1 --> E1((deploy
-TensorFlow Serving
-on Kubernetes))
-    E1 --> | pod,service,deployment
-running | F1((expose
-TensorFlow Serving API))
-    F1 --> G1((test 
-model inference
-via API))
-
-    D2 --> E2((push
-image to ECR))
-    E2 --> F2((create
-AWS EKS Cluster))
-    F2 --> G2((deploy 
-TensorFlow Serving
-on EKS))
-    G2 --> | pod,service,deployment
-running | H2((expose
-API with LoadBalancer))
-    H2 --> I2((test 
-model inference
-via API))
-datasets --> A
-Dockerfile --> B
-kube-deployment.yaml --> E1
-kube-service.yaml --> E1
-eks-deploymeny.yaml --> G2
-eks-service.yaml --> G2
-```
-
+### Infrastructure & Deployment
+- Docker for application containerization
+- Kubernetes for container orchestration and scaling
+- AWS EKS providing managed Kubernetes infrastructure
 
 ## Model
 
@@ -168,20 +44,20 @@ Steps:
 ## Repository Structures
 
    ```
-   ├── README.md                                 # Documentation for the project
-   ├── config                                    # Configuration files
+   ├── README.md                                
+   ├── config                                    
    │   ├── kube-deployment.yaml
    │   ├── kube-service.yaml
    │   ├── eks-deployment.yaml
    │   ├── eks-service.yaml
-   ├── src                                       # Code (python scripts)
+   ├── src                                       
    │   ├── train_model.py
    │   ├── predict_model.py
    │   ├── notebook.ipynb
    │   ├── EDA.ipynb
-   ├── build-docker-image.md                     # Build docker and run container commands 
-   ├── kubectl-apply.md                          # Kubernetes deployment and service commands
-   ├── Dockerfile                                # Instructions to containerize the application
+   ├── build-docker-image.md                      
+   ├── kubectl-apply.md                          
+   ├── Dockerfile                                
    ├── saved_model                               # Final saved model
    │   ├── assets
    │   ├── fingerprint.pb
@@ -189,7 +65,7 @@ Steps:
    │   └── variables
    │       ├── variables.data-00000-of-00001
    │       └── variables.index
-   ├── tokenizer.pkl                            # Tokenizer output
+   ├── tokenizer.pkl                            
 
    ```
 
