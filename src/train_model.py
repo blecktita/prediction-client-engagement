@@ -42,10 +42,10 @@ run_command("hdfs dfsadmin -safemode leave")
 
 # Create HDFS directories
 hdfs_dirs = [
-    "e-commerce/datasets",
-    "e-commerce/splits",
-    "e-commerce/models",
-    "e-commerce/outputs"
+    "tweet/datasets",
+    "tweet/splits",
+    "tweet/models",
+    "tweet/outputs"
 ]
 
 for hdfs_dir in hdfs_dirs:
@@ -56,7 +56,7 @@ print("All tasks completed successfully!")
 
 # Download dataset from Kaggle
 kaggle_dataset_path = "~/kaggle-datasets"
-dataset_name = "indonesia-top-ecommerce-unicorn-tweets"
+dataset_name = "spain-top-ecommerce-unicorn-tweets"
 print("Downloading dataset from Kaggle...")
 run_command(f"kaggle datasets download -d robertvici/{dataset_name} -p {kaggle_dataset_path}")
 
@@ -72,15 +72,15 @@ run_command(f"hdfs dfs -put {kaggle_dataset_path}/*.json e-commerce/datasets/")
 
 # Initialize Spark Session
 spark = SparkSession.builder \
-    .appName("E-Commerce Engagement Prediction ML") \
+    .appName("Engagement Prediction ML") \
     .getOrCreate()
 
 # Load datasets
-blibli_df = spark.read.json('e-commerce/datasets/bliblidotcom.json')
-bukalapak_df = spark.read.json('e-commerce/datasets/bukalapak.json')
-lazadaID_df = spark.read.json('e-commerce/datasets/lazadaID.json')
-shopeeID_df = spark.read.json('e-commerce/datasets/ShopeeID.json')
-tokopedia_df = spark.read.json('e-commerce/datasets/tokopedia.json')
+blibli_df = spark.read.json('tweet/datasets/bliblidotcom.json')
+bukalapak_df = spark.read.json('tweet/datasets/bukalapak.json')
+lazadaID_df = spark.read.json('tweet/datasets/lazadaID.json')
+shopeeID_df = spark.read.json('tweet/datasets/ShopeeID.json')
+tokopedia_df = spark.read.json('tweet/datasets/tokopedia.json')
 
 # Add a new column to identify the company source
 blibli_df = blibli_df.withColumn('source', lit('blibli'))
@@ -117,9 +117,9 @@ selected_data = data_cleaned.select(
 train_data, validate_data, test_data = selected_data.randomSplit([0.7, 0.15, 0.15], seed=42)
 
 # Save splits for later use
-train_data.write.json("e-commerce/splits/train.json", mode="overwrite")
-validate_data.write.json("commerce/splits/validate.json", mode="overwrite")
-test_data.write.json("commerce/splits/test.json", mode="overwrite")
+train_data.write.json("tweet/splits/train.json", mode="overwrite")
+validate_data.write.json("tweet/splits/validate.json", mode="overwrite")
+test_data.write.json("tweet/splits/test.json", mode="overwrite")
 
 # Change null value with 0 (if any)
 merged_df = merged_df.fillna({"likes_count": 0, "replies_count": 0, "retweets_count": 0})
@@ -191,7 +191,7 @@ y_train = np.array(train_df["target"])  # Adjust this based on your target colum
 model.fit(X_train, y_train, epochs=10, batch_size=32)
 
 # Save the model with a valid file extension in local server
-model.save("e-commerce-engagement_model.keras")  # For the native Keras format
+model.save("engagement_model.keras")  # For the native Keras format
 
 # Export to save model
 model.export("saved_model/1")
