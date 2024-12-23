@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
+config/
+src/deploy_aws_eks.ipynb
+scr/*.ipynb
 
 # C extensions
 *.so
