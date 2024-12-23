@@ -3,6 +3,7 @@
 ---
 
 ## Project Overview
+---
 
 I basically created a predictive system that analyzes the social media engagement for most clients. I deployed the model using TensorFlow Serving for real-time predictions, packaged it in Docker containers, and orchestrated it with Kubernetes on AWS EKS
 ---
@@ -71,33 +72,27 @@ Steps:
 
 ---
 
-## Deployment Architecture
+## Infrastructure Design
+### Model Serving Layer
+- Model preparation involves converting trained Keras models into TensorFlow's SavedModel standard
+- Dedicated TensorFlow Serving instances handle prediction requests through RESTful endpoints
 
-The project follows a microservices deployment architecture:
+### Application Layer
+- Custom Flask microservice routes client requests to model servers
+- Dockerized application components ensure consistent deployment environments
 
-1. Model Deployment
+### Orchestration Strategy
+- Kubernetes manages container lifecycle and scaling
+  - Handles service discovery and load balancing
+  - Enables automated rollouts and rollbacks
+  - Supports both local development and cloud deployment
 
-   The trained Keras model is exported to TensorFlow SavedModel format.
-
-   TensorFlow Serving hosts the model and provides an endpoint for predictions.
-
-2. API Deployment
-
-   A Flask application sends requests to TensorFlow Serving and returns predictions to clients.
-
-   The Flask app is containerized using Docker.
-
-3. Kubernetes Orchestration
-
-   The TensorFlow Serving container is orchestrated using Kubernetes.
-
-   Kubernetes is deployed locally or in AWS EKS for scalability.
-
-4. AWS EKS Deployment
-
-   Use AWS Elastic Kubernetes Service (EKS) for production-level deployment and scaling.
-
----
+### Cloud Infrastructure
+- AWS EKS provides enterprise-grade Kubernetes management
+  - Automated control plane operations
+  - Integrated monitoring and logging
+  - Dynamic scaling based on demand
+--
 
 ## How to Run the Project
 
