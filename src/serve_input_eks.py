@@ -14,7 +14,7 @@ with open('tokenizer.pkl', 'rb') as file:
 MAX_SEQUENCE_LENGTH = 20
 
 # TensorFlow Serving URL
-TF_SERVING_URL = "http://a09b1c4049dec41438aaf1b11012942f-1058378139.ap-southeast-3.elb.amazonaws.com:8501/v1/models/saved_model:predict"
+TF_SERVING_URL = "http://a09b1c4049dec41438aaf1b11012942f-1058378139.eu-south-2.elb.amazonaws.com:8501/v1/models/saved_model:predict"
 
 def preprocess_input(text):
     # Convert text to sequences and pad
